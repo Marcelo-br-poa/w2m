@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,5 +15,6 @@ public class HeroeRequest {
 
     private Long id;
 
+    @NotBlank(message = "El campo NAME no puede estar nulo")
     private String name;
 }
