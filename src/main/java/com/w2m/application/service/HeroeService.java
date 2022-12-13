@@ -1,14 +1,10 @@
 package com.w2m.application.service;
 
-import com.w2m.application.in.HeroeConsultAllCase;
-import com.w2m.application.in.HeroeConsultIdCase;
-import com.w2m.application.in.HeroeSavedCase;
-import com.w2m.application.out.HeroeConusultAllPort;
-import com.w2m.application.out.HeroeConusultIdPort;
-import com.w2m.application.out.HeroeConusultNamePort;
-import com.w2m.application.out.HeroeSavedPort;
+import com.w2m.application.in.*;
+import com.w2m.application.out.*;
 import com.w2m.common.GeneralMessages;
 import com.w2m.common.MessageResponse;
+import com.w2m.common.exceptions.ValidatioinConsult;
 import com.w2m.common.exceptions.ValidationRequest;
 import com.w2m.domain.HeroeRequest;
 import com.w2m.domain.HeroeResponse;
@@ -28,13 +24,19 @@ import java.util.stream.Collectors;
 public class HeroeService implements
         HeroeSavedCase,
         HeroeConsultAllCase,
-        HeroeConsultIdCase {
+        HeroeConsultIdCase,
+        HeroeConsultLikeNameCase,
+        HeroeUpdateCase,
+        HeroeDeleteCase{
 
     private HeroeSavedPort heroeSavedPort;
     private HeroeConusultNamePort heroeConusultNamePort;
     private HeroeConusultIdPort heroeConusultIdPort;
 
     private HeroeConusultAllPort heroeConusultAllPort;
+    private HeroeConusultLikeNamePort heroeConusultLikeNamePort;
+    private HeroeUpdatePort heroeUpdatePort;
+    private HeroeDeletePort heroeDeletePort;
     private Validator validator;
 
     @Autowired
@@ -43,6 +45,9 @@ public class HeroeService implements
             HeroeConusultNamePort heroeConusultNamePort,
             HeroeConusultIdPort heroeConusultIdPort,
             HeroeConusultAllPort heroeConusultAllPort,
+            HeroeConusultLikeNamePort heroeConusultLikeNamePort,
+            HeroeUpdatePort heroeUpdatePort,
+            HeroeDeletePort heroeDeletePort,
             Validator validator
     ) {
 
@@ -50,6 +55,9 @@ public class HeroeService implements
         this.heroeConusultNamePort = heroeConusultNamePort;
         this.heroeConusultIdPort = heroeConusultIdPort;
         this.heroeConusultAllPort = heroeConusultAllPort;
+        this.heroeConusultLikeNamePort = heroeConusultLikeNamePort;
+        this.heroeUpdatePort = heroeUpdatePort;
+        this.heroeDeletePort = heroeDeletePort;
 
         this.validator = validator;
     }
@@ -77,12 +85,64 @@ public class HeroeService implements
     }
 
     @Override
+    public HeroeResponse heroeUpdateCase(Long id, HeroeRequest request){
+
+        HeroeResponse response = new HeroeResponse();
+
+        var consultHeroe = heroeConusultIdPort.heroeConusultIdPort(id);
+
+        if(consultHeroe == null){
+            log.info(GeneralMessages.LOG_NO_EXISTE_REGISTRO, id);
+            throw new ValidatioinConsult(HttpStatus.INTERNAL_SERVER_ERROR, String.format(GeneralMessages.MESSAGE_NO_EXISTE_REGISTRO, id));
+        }
+
+        var consultName = heroeConusultNamePort.heroeConusultNamePort(request.getName());
+        if(consultName.isEmpty()){
+
+            response = heroeUpdatePort.heroeUpdatePort(id, request);
+
+        }else{
+            response = HeroeResponse
+                    .builder()
+                    .id(id)
+                    .name(request.getName())
+                    .build();
+        }
+
+        return response;
+    }
+
+    @Override
     public List<HeroeResponse> heroeConsultAllCase() {
         return heroeConusultAllPort.heroeConusultAllPort();
     }
 
     @Override
     public HeroeResponse heroeConsultIdCase(Long id) {
+
         return heroeConusultIdPort.heroeConusultIdPort(id);
+    }
+
+    @Override
+    public List<HeroeResponse> heroeConsultLikeNameCase(String name) {
+
+        var consultNameLikeHeroe = heroeConusultLikeNamePort.heroeConusultLikeNamePort(name);
+        if (consultNameLikeHeroe.isEmpty()){
+            throw new ValidatioinConsult(HttpStatus.INTERNAL_SERVER_ERROR, String.format(GeneralMessages.MESSAGE_NO_EXISTE_HEROE_LIKE, name));
+        }
+
+        return consultNameLikeHeroe;
+
+    }
+    @Override
+    public void heroeDeleteCase(Long id) {
+
+        var consultHeroe = heroeConusultIdPort.heroeConusultIdPort(id);
+        if(consultHeroe == null){
+            log.info(GeneralMessages.LOG_NO_EXISTE_REGISTRO, id);
+            throw new ValidatioinConsult(HttpStatus.INTERNAL_SERVER_ERROR, String.format(GeneralMessages.MESSAGE_NO_EXISTE_REGISTRO, id));
+        }
+
+        heroeDeletePort.heroeDeletePort(id);
     }
 }

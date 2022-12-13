@@ -1,9 +1,7 @@
 package com.w2m.adapter.in;
 
 
-import com.w2m.application.in.HeroeConsultAllCase;
-import com.w2m.application.in.HeroeConsultIdCase;
-import com.w2m.application.in.HeroeSavedCase;
+import com.w2m.application.in.*;
 import com.w2m.common.MessageResponse;
 import com.w2m.domain.HeroeRequest;
 import com.w2m.domain.HeroeResponse;
@@ -23,16 +21,25 @@ public class HeroeController {
     private HeroeSavedCase heroeSavedCase;
     private HeroeConsultAllCase heroeConsultAllCase;
     private HeroeConsultIdCase heroeConsultIdCase;
+    private HeroeConsultLikeNameCase heroeConsultLikeNameCase;
+    private HeroeUpdateCase heroeUpdateCase;
+    private HeroeDeleteCase heroeDeleteCase;
 
     @Autowired
     public HeroeController(
             HeroeSavedCase heroeSavedCase,
             HeroeConsultAllCase heroeConsultAllCase,
-            HeroeConsultIdCase heroeConsultIdCase
+            HeroeConsultIdCase heroeConsultIdCase,
+            HeroeConsultLikeNameCase heroeConsultLikeNameCase,
+            HeroeUpdateCase heroeUpdateCase,
+            HeroeDeleteCase heroeDeleteCase
     ) {
         this.heroeSavedCase = heroeSavedCase;
         this.heroeConsultAllCase = heroeConsultAllCase;
         this.heroeConsultIdCase = heroeConsultIdCase;
+        this.heroeConsultLikeNameCase = heroeConsultLikeNameCase;
+        this.heroeUpdateCase = heroeUpdateCase;
+        this.heroeDeleteCase = heroeDeleteCase;
     }
 
     @PostMapping
@@ -41,9 +48,28 @@ public class HeroeController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @PutMapping("/{heroeId}")
+    public ResponseEntity<HeroeResponse> updateHeroe(@PathVariable("heroeId") Long heroeId, @RequestBody HeroeRequest request){
+        var updateHeroe = heroeUpdateCase.heroeUpdateCase(heroeId, request);
+
+        return ResponseEntity.ok(updateHeroe);
+    }
+
+    @DeleteMapping("/{heroeId}")
+    public ResponseEntity deleteHeroe(@PathVariable("heroeId") Long heroeId){
+        heroeDeleteCase.heroeDeleteCase(heroeId);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    }
+
     @GetMapping
     public ResponseEntity<List<HeroeResponse>> getHeroeAll(){
         var listHeroe =  heroeConsultAllCase.heroeConsultAllCase();
+        return ResponseEntity.ok().body(listHeroe);
+    }
+
+    @GetMapping("/list/{nameHeroe}")
+    public ResponseEntity<List<HeroeResponse>> getHeroeName(@PathVariable("nameHeroe") String nameHeroe){
+        var listHeroe =  heroeConsultLikeNameCase.heroeConsultLikeNameCase(nameHeroe);
         return ResponseEntity.ok().body(listHeroe);
     }
 
