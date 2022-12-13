@@ -3,7 +3,6 @@ package com.w2m.application.service;
 import com.w2m.application.in.*;
 import com.w2m.application.out.*;
 import com.w2m.common.GeneralMessages;
-import com.w2m.common.MessageResponse;
 import com.w2m.common.exceptions.ValidatioinConsult;
 import com.w2m.common.exceptions.ValidationRequest;
 import com.w2m.domain.HeroeRequest;
@@ -98,18 +97,29 @@ public class HeroeService implements
 
         var consultName = heroeConusultNamePort.heroeConusultNamePort(request.getName());
         if(consultName.isEmpty()){
-
             response = heroeUpdatePort.heroeUpdatePort(id, request);
-
         }else{
-            response = HeroeResponse
-                    .builder()
-                    .id(id)
-                    .name(request.getName())
-                    .build();
+            consultName.forEach(listEntity ->{
+                if(listEntity.getName().equals(request.getName()) && listEntity.getId() != request.getId()){
+                    log.info(GeneralMessages.LOG_UPDATE_EXISTE_HEROE, id);
+                    throw new ValidatioinConsult(HttpStatus.INTERNAL_SERVER_ERROR, String.format(GeneralMessages.MESSAGE_UPDATE_EXISTE_HEROE, request.getName()));
+                }
+            });
         }
 
         return response;
+    }
+
+    @Override
+    public void heroeDeleteCase(Long id) {
+
+        var consultHeroe = heroeConusultIdPort.heroeConusultIdPort(id);
+        if(consultHeroe == null){
+            log.info(GeneralMessages.LOG_NO_EXISTE_REGISTRO, id);
+            throw new ValidatioinConsult(HttpStatus.INTERNAL_SERVER_ERROR, String.format(GeneralMessages.MESSAGE_NO_EXISTE_REGISTRO, id));
+        }
+
+        heroeDeletePort.heroeDeletePort(id);
     }
 
     @Override
@@ -134,15 +144,5 @@ public class HeroeService implements
         return consultNameLikeHeroe;
 
     }
-    @Override
-    public void heroeDeleteCase(Long id) {
 
-        var consultHeroe = heroeConusultIdPort.heroeConusultIdPort(id);
-        if(consultHeroe == null){
-            log.info(GeneralMessages.LOG_NO_EXISTE_REGISTRO, id);
-            throw new ValidatioinConsult(HttpStatus.INTERNAL_SERVER_ERROR, String.format(GeneralMessages.MESSAGE_NO_EXISTE_REGISTRO, id));
-        }
-
-        heroeDeletePort.heroeDeletePort(id);
-    }
 }

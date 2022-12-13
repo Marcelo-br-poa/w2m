@@ -58,6 +58,12 @@ public class HeroeAdapter implements
     }
 
     @Override
+    @Transactional
+    public void heroeDeletePort(Long id) {
+        heroeRepository.deleteById(id);
+    }
+
+    @Override
     public List<HeroeResponse> heroeConusultNamePort(String name) {
 
         var consultNameEntity = heroeRepository.findByName(name);
@@ -98,10 +104,4 @@ public class HeroeAdapter implements
         return heroeMapper.listToResponseEntity(listEntity);
     }
 
-
-    @Override
-    @Transactional
-    public void heroeDeletePort(Long id) {
-        heroeRepository.deleteById(id);
-    }
 }
