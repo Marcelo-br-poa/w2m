@@ -13,6 +13,9 @@ public interface HeroeRepository extends JpaRepository<HeroeEntity, Long> {
 
     List<HeroeEntity> findByName(String name);
 
+//    @Query("Select s from HeroeEntity s where lower(s.name) = :name")
+//    List<HeroeEntity> findName(@Param("name") String name);
+
     @Query("Select s from HeroeEntity s where lower(s.name) like CONCAT('%',:name,'%')")
     List<HeroeEntity> listNameHeroe(@Param("name") String name);
 }

@@ -7,6 +7,5 @@ import com.w2m.domain.HeroeResponse;
 import java.util.List;
 
 public interface HeroeConusultNamePort {
-
     List<HeroeResponse> heroeConusultNamePort(String name);
 }
