@@ -91,13 +91,13 @@ public class HeroeAdapter implements
 
     @Override
     public List<HeroeResponse> heroeConusultAllPort() {
-        log.info("\nInicio de la consulta");
+        log.info(GeneralMessages.LOG_PROCESO,"Inicio", "consulta", "heroeConusultAllPort");
         var listEntity = heroeRepository.findAll();
         List<HeroeResponse> listResponse = new ArrayList<>();
         if (!listEntity.isEmpty()){
             listResponse = heroeMapper.listToResponseEntity(listEntity);
         }
-        log.info("\nFin de la consulta");
+        log.info(GeneralMessages.LOG_PROCESO,"Fin", "consulta", "heroeConusultAllPort");
         return listResponse;
     }
 
