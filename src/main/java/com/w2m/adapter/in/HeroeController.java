@@ -47,7 +47,7 @@ public class HeroeController {
 
     @PostMapping
     @CacheEvict(value = "getHeroeAll", allEntries = true)
-    public ResponseEntity savedHeroe(@RequestBody HeroeRequest heroeRequest){
+    public ResponseEntity<HeroeResponse> savedHeroe(@RequestBody HeroeRequest heroeRequest){
         heroeSavedCase.heroeSavedCase(heroeRequest);
         log.info(GeneralMessages.LOG_LIMPIO_CACHE);
         return ResponseEntity.status(HttpStatus.CREATED).build();

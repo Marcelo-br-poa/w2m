@@ -63,7 +63,7 @@ public class HeroeService implements
     }
 
     @Override
-    public void heroeSavedCase(HeroeRequest heroeRequest) {
+    public HeroeResponse heroeSavedCase(HeroeRequest heroeRequest) {
 
         Set<ConstraintViolation<HeroeRequest>> constraintViolations = validator.validate(heroeRequest);
         if (!constraintViolations.isEmpty()) {
@@ -82,6 +82,8 @@ public class HeroeService implements
         } else {
             throw new ValidationRequest(HttpStatus.NOT_FOUND, String.format(GeneralMessages.MESSAGE_EXISTE_HEROE, heroeRequest.getName()));
         }
+
+        return null;
     }
 
     @Override
