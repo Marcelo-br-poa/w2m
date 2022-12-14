@@ -9,6 +9,8 @@ import com.w2m.domain.HeroeResponse;
 import com.w2m.domain.mapper.HeroeMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -89,11 +91,13 @@ public class HeroeAdapter implements
 
     @Override
     public List<HeroeResponse> heroeConusultAllPort() {
+        log.info("\nInicio de la consulta");
         var listEntity = heroeRepository.findAll();
         List<HeroeResponse> listResponse = new ArrayList<>();
         if (!listEntity.isEmpty()){
             listResponse = heroeMapper.listToResponseEntity(listEntity);
         }
+        log.info("\nFin de la consulta");
         return listResponse;
     }
 
