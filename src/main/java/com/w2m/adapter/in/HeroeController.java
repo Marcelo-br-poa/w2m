@@ -7,6 +7,8 @@ import com.w2m.domain.HeroeRequest;
 import com.w2m.domain.HeroeResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,12 +45,14 @@ public class HeroeController {
     }
 
     @PostMapping
+    @CacheEvict(value = "getHeroeAll", allEntries = true)
     public ResponseEntity savedHeroe(@RequestBody HeroeRequest heroeRequest){
         heroeSavedCase.heroeSavedCase(heroeRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{heroeId}")
+    @CacheEvict(value = "getHeroeAll", allEntries = true)
     public ResponseEntity<HeroeResponse> updateHeroe(@PathVariable("heroeId") Long heroeId, @RequestBody HeroeRequest request){
         var updateHeroe = heroeUpdateCase.heroeUpdateCase(heroeId, request);
 
@@ -56,12 +60,14 @@ public class HeroeController {
     }
 
     @DeleteMapping("/{heroeId}")
+    @CacheEvict(value = "getHeroeAll", allEntries = true)
     public ResponseEntity deleteHeroe(@PathVariable("heroeId") Long heroeId){
         heroeDeleteCase.heroeDeleteCase(heroeId);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     @GetMapping
+    @Cacheable(value = "getHeroeAll")
     public ResponseEntity<List<HeroeResponse>> getHeroeAll(){
         var listHeroe =  heroeConsultAllCase.heroeConsultAllCase();
         return ResponseEntity.ok().body(listHeroe);
