@@ -7,6 +7,9 @@ public class GeneralMessages {
     public static final String LOG_NO_EXISTE_REGISTRO = "No hay registro con el ID informado: {}";
     public static final String LOG_UPDATE_EXISTE_HEROE = "Ya existe un Heroe con el mismo nombre: {} con Id distinto";
     public static final String LOG_TIEMPO_EJECUCION = "\nTiempo de ejecucion : {} milisegundos del metodo {} de la clase {} ";
+    public static final String LOG_PROCESO = "\n{} del proceso de {} del metodo {}";
+    public static final String LOG_CACHE = "\nCache para el metodo {}";
+    public static final String LOG_LIMPIO_CACHE = "\nLimpio el Cache";
 
 
     //Messages

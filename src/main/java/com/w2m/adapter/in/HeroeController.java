@@ -2,6 +2,7 @@ package com.w2m.adapter.in;
 
 
 import com.w2m.application.in.*;
+import com.w2m.common.GeneralMessages;
 import com.w2m.common.MessageResponse;
 import com.w2m.domain.HeroeRequest;
 import com.w2m.domain.HeroeResponse;
@@ -48,6 +49,7 @@ public class HeroeController {
     @CacheEvict(value = "getHeroeAll", allEntries = true)
     public ResponseEntity savedHeroe(@RequestBody HeroeRequest heroeRequest){
         heroeSavedCase.heroeSavedCase(heroeRequest);
+        log.info(GeneralMessages.LOG_LIMPIO_CACHE);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -55,7 +57,7 @@ public class HeroeController {
     @CacheEvict(value = "getHeroeAll", allEntries = true)
     public ResponseEntity<HeroeResponse> updateHeroe(@PathVariable("heroeId") Long heroeId, @RequestBody HeroeRequest request){
         var updateHeroe = heroeUpdateCase.heroeUpdateCase(heroeId, request);
-
+        log.info(GeneralMessages.LOG_LIMPIO_CACHE);
         return ResponseEntity.ok(updateHeroe);
     }
 
@@ -63,6 +65,7 @@ public class HeroeController {
     @CacheEvict(value = "getHeroeAll", allEntries = true)
     public ResponseEntity deleteHeroe(@PathVariable("heroeId") Long heroeId){
         heroeDeleteCase.heroeDeleteCase(heroeId);
+        log.info(GeneralMessages.LOG_LIMPIO_CACHE);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
@@ -70,6 +73,7 @@ public class HeroeController {
     @Cacheable(value = "getHeroeAll")
     public ResponseEntity<List<HeroeResponse>> getHeroeAll(){
         var listHeroe =  heroeConsultAllCase.heroeConsultAllCase();
+        log.info(GeneralMessages.LOG_CACHE,"getHeroeAll");
         return ResponseEntity.ok().body(listHeroe);
     }
 
