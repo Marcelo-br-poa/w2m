@@ -9,7 +9,6 @@ import com.w2m.domain.HeroeRequest;
 import com.w2m.domain.HeroeResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -75,19 +74,31 @@ public class HeroeService implements
             throw new ValidationRequest(HttpStatus.BAD_REQUEST, String.format(GeneralMessages.MESSAGE_ERROR_REQUEST, violationMessage));
         }
 
+        HeroeResponse response = new HeroeResponse();
+
         var consultName = heroeConusultNamePort.heroeConusultNamePort(heroeRequest.getName());
 
         if (consultName.isEmpty()) {
-            heroeSavedPort.heroeSavedPort(heroeRequest);
+            response = heroeSavedPort.heroeSavedPort(heroeRequest);
         } else {
             throw new ValidationRequest(HttpStatus.NOT_FOUND, String.format(GeneralMessages.MESSAGE_EXISTE_HEROE, heroeRequest.getName()));
         }
 
-        return null;
+        return response;
     }
 
     @Override
     public HeroeResponse heroeUpdateCase(Long id, HeroeRequest request){
+
+        Set<ConstraintViolation<HeroeRequest>> constraintViolations = validator.validate(request);
+        if (!constraintViolations.isEmpty()) {
+            String violationMessage = constraintViolations.stream().map(ConstraintViolation::getMessage)
+                    .collect(Collectors.joining(","));
+
+            log.error(GeneralMessages.LOG_ERROR_REQUEST, violationMessage);
+
+            throw new ValidationRequest(HttpStatus.BAD_REQUEST, String.format(GeneralMessages.MESSAGE_ERROR_REQUEST, violationMessage));
+        }
 
         HeroeResponse response = new HeroeResponse();
 

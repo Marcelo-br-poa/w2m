@@ -3,7 +3,6 @@ package com.w2m.adapter.in;
 
 import com.w2m.application.in.*;
 import com.w2m.common.GeneralMessages;
-import com.w2m.common.MessageResponse;
 import com.w2m.domain.HeroeRequest;
 import com.w2m.domain.HeroeResponse;
 import lombok.extern.slf4j.Slf4j;
