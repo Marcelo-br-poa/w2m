@@ -1,7 +1,7 @@
 package com.w2m.adapter.out.adapter;
 
-import com.w2m.adapter.out.persiste.HeroeEntity;
-import com.w2m.adapter.out.repository.HeroeRepository;
+import com.w2m.adapter.out.persiste.heroe.HeroeEntity;
+import com.w2m.adapter.out.repository.heroe.HeroeRepository;
 import com.w2m.application.out.*;
 import com.w2m.common.GeneralMessages;
 import com.w2m.common.exceptions.ValidatioinConsult;
@@ -49,6 +49,7 @@ public class HeroeAdapter implements
                 .id(heroeRequest.getId())
                 .name(heroeRequest.getName())
                 .build();
+        heroeRepository.save(savedEntity);
 
         return HeroeResponse
                 .builder()
@@ -69,7 +70,7 @@ public class HeroeAdapter implements
                 .name(request.getName())
                 .build();
 
-                heroeRepository.save(entity);
+        heroeRepository.save(entity);
 
         return  HeroeResponse
                 .builder()

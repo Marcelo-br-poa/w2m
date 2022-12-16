@@ -1,6 +1,7 @@
 package com.w2m.adapter.out.repository;
 
-import com.w2m.adapter.out.persiste.HeroeEntity;
+import com.w2m.adapter.out.persiste.heroe.HeroeEntity;
+import com.w2m.adapter.out.repository.heroe.HeroeRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

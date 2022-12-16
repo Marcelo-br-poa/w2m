@@ -1,4 +1,4 @@
-package com.w2m.adapter.out.persiste;
+package com.w2m.adapter.out.persiste.heroe;
 
 
 import lombok.AllArgsConstructor;
