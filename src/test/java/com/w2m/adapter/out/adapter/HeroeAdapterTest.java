@@ -1,7 +1,7 @@
 package com.w2m.adapter.out.adapter;
 
-import com.w2m.adapter.out.persiste.HeroeEntity;
-import com.w2m.adapter.out.repository.HeroeRepository;
+import com.w2m.adapter.out.persiste.heroe.HeroeEntity;
+import com.w2m.adapter.out.repository.heroe.HeroeRepository;
 import com.w2m.domain.HeroeRequest;
 import com.w2m.domain.HeroeResponse;
 import com.w2m.domain.mapper.HeroeMapper;

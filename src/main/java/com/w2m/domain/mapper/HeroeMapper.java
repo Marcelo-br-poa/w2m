@@ -1,7 +1,7 @@
 package com.w2m.domain.mapper;
 
 
-import com.w2m.adapter.out.persiste.HeroeEntity;
+import com.w2m.adapter.out.persiste.heroe.HeroeEntity;
 import com.w2m.domain.HeroeRequest;
 import com.w2m.domain.HeroeResponse;
 import lombok.extern.slf4j.Slf4j;

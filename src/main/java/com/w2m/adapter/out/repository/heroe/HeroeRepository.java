@@ -1,6 +1,6 @@
-package com.w2m.adapter.out.repository;
+package com.w2m.adapter.out.repository.heroe;
 
-import com.w2m.adapter.out.persiste.HeroeEntity;
+import com.w2m.adapter.out.persiste.heroe.HeroeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
